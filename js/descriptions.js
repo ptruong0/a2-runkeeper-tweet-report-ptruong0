@@ -1,15 +1,38 @@
 function parseTweets(runkeeper_tweets) {
 	//Do not proceed if no tweets loaded
-	if(runkeeper_tweets === undefined) {
+	if (runkeeper_tweets === undefined) {
 		window.alert('No tweets returned');
 		return;
 	}
 
-	//TODO: Filter to just the written tweets
+	tweet_array = runkeeper_tweets.map(function (tweet) {
+		return new Tweet(tweet.text, tweet.created_at);
+	})
 }
 
 function addEventHandlerForSearch() {
-	//TODO: Search the written tweets as text is entered into the search box, and add them to the table
+	// initial values
+	$('#searchCount').text(0);
+	$('#searchText').text('');
+
+	$('#textFilter').on('input', () => {
+		const query = $("#textFilter").val();
+		$('#tweetTable').empty();
+
+		var id = 1;
+		if (query.length > 0) {
+			// traverse tweets and add table row if query matches
+			tweet_array.forEach((tweet) => {
+			if (tweet.text.toLowerCase().includes(query.toLowerCase())) {
+				$('#tweetTable').append($(tweet.getHTMLTableRow(id)));
+				id++;
+			}
+		})
+		}
+		
+		$('#searchCount').text(id - 1);
+		$('#searchText').text(query);
+	})
 }
 
 //Wait for the DOM to load
